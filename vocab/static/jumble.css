@@ -13,3 +13,46 @@
 .message { 
     color: red;
 }
+
+body {
+    background-color: lightyellow;
+}
+
+h1 {
+    color: darkblue;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+h2 {
+    color: indigo;
+    font-size: 34px;
+    line-height: .25;
+}
+
+h3 {
+    font-size: 24px;
+}
+
+h4 {
+    color: firebrick;
+    font-size: 30px;
+}
+
+p {
+    font-size: 21px;
+    line-height: .75; 
+}
+
+p.wide {
+    font-size: 21px;
+    line-height: 1.25;
+}
+
+.col-xs-6 {
+    font-size: 28px;
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+
