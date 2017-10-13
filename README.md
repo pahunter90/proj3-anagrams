@@ -16,7 +16,9 @@ have different anagrams.
 
 ## Authors 
 
-Initial version by M Young; to be revised by CIS 322 students. 
+Initial version by M Young; 
+Final version by P Hunter
+Contact: phunter@uoregon.edu
 
 ## Known bugs
 
@@ -30,11 +32,11 @@ to kill it.  Or, on Linux systems, use the 'killall' command.
 
 ## Status
 
-flask_vocab.py and the template vocab.html are a 'skeleton' version 
-of the anagram game for a CIS 322 project.  They uses conventional  
-interaction through a form, interacting only when the user submits the form. 
-Your assignment is to replace the interaction with AJAX interaction on each 
-keystroke. 
+updated version runs a real-time checker
+Everytime a key is pressed it checks the word (or partial word) against the word list, jumble, and
+solved words. If the key is a valid key it gives a prompt to keep going. If the key is not a valid 
+key the program will display an equivalent error message and clear the text box. The user can then
+start over with a new word.
 
 ## Minijax? 
 
