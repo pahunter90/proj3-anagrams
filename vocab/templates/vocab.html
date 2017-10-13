@@ -36,7 +36,7 @@
 
 <!-- Our own css file.  Note how we can link directly here and not -->
 <!-- write any routing code in the Flask application. -->
-<link rel="stylesheet" href="/static/jumble.css" />
+<link rel="stylesheet" type="text/css" href="/static/jumble.css">
 
 </head>
 
@@ -49,12 +49,12 @@
     </div>
   </div>
 <!-- Vocabularly words layed out in 6 columns;
-  -- bootstrap may collapse to fewer columns and
-  -- more rows if the window is narrow.
-  -->
+     bootstrap may collapse to fewer columns and
+     more rows if the window is narrow. -->
+
 <div class="row">
   {% for word in g.vocab %}
-    <div class="col-xs-2 text-center"> {{ word }} </div>
+    <div class="col-xs-2 text-center"><p>{{ word }}</p> </div>
     {% if loop.index is divisibleby 3 %}
     </div> <!-- row -->
     <div class="row">
@@ -66,29 +66,83 @@
 
 <div class="row">
   <div class="col-xs-6 text-center">
-   Use letters from
+   <h3>Use letters from</h3>
   </div>
   </div><div class="row">
   <div class="col-xs-6 text-center lead">
-    <strong>{{ session.jumble }}</strong>
+    <h2><strong>{{ session.jumble }}</strong></h2>
   </div>
   </div><div class="row">
   <div class="col-xs-6 text-center">
-    to spell {{session.target_count}} words from the list.
+    <h3>to spell {{session.target_count}} words from the list.</h3>
   </div> <!-- col -->
 </div> <!-- row -->
 <br />
 <div class="row">
   <div class="col-xs-6 text-center">
-  <form id="entry" method="POST" action="/_check">
+  <form id="entry">
     <label for="attempt">Word:</label>
     <input id="attempt" name="attempt" type="text" width="15"
       autocomplete="off"  autofocus />
-    <input type="submit" name="try" />
   </form>
 </div></div>
 
+<h4 id="response"> </h4>
+
+<h3><strong>You have found:</strong></h3>
+
+<p class="wide" id="words"> </p>
+<p id="again"> </p>
+
+<script>
+
+$("#entry").submit(function(event) {
+    event.preventDefault();
+  });
+
+$("#attempt").keyup(function(event) {
+    var txt = $("#attempt").val();
+    var keycode = event.which;
+    var letter = String.fromCharCode(keycode);
+    
+    console.log("keyup event triggered with keycode: " + keycode + " and text: " + txt)
+     
+    if(!"ABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(letter)){ return; }
+
+    $.getJSON("/_check", {text: txt}, function(data) {
+        rsval = data.result.match;
+        rsenough = data.result.enough;
+        console.log("rsval: " + rsval)
+        if(rsval == "new_match"){
+            if(rsenough){
+                $("#response").text("You found all of the words! YOU WIN!!!");
+                $("#words").append(txt + "\n");
+                $("#attempt").val("");
+                $("#attempt").attr("disabled", "disabled");
+                $("#again").html("<a href=\"/index\">Play again?</a>");
+            } else {
+                $("#response").text("You found one of the words!");
+                $("#attempt").val("");
+	        $("#words").append(txt + "<br>");
+            }
+        }
+        else if(rsval == "in_list"){
+            $("#response").text("In the list, keep going!");
+        }
+        else if(rsval == "not_in_jumble"){
+            $("#response").text("Used an incorrect letter, please try again...");
+            $("#attempt").val("");
+        }
+        else {
+            $("#response").text("Already found or not in the list, please try again...");
+            $("#attempt").val("");
+        }
+    });
+});
+</script>
+
 <br />
+
 
 {% if session.matches|length is not equalto 0  %}
 <h2>You found </h2>
